@@ -19,7 +19,7 @@
     "postinstall": "patch-package",
     "automated-release": "release-it -VV --config ./release/.release-it.json",
     "analyze": "source-map-explorer 'dist/swagger-editor-bundle.js'",
-    "build": "npm run build:stylesheets && rimraf ./dist/swagger-editor.js ./dist/swagger-editor.js.map && npm run build-all-bundles",
+    "build": "node api.js && npm run build:stylesheets && rimraf ./dist/swagger-editor.js ./dist/swagger-editor.js.map && npm run build-all-bundles",
     "build-all-bundles": "run-p --aggregate-output build:core build:bundle build:standalone build:es:bundle build:es:bundle:core",
     "build:bundle": "webpack --config webpack/bundle.babel.js --color",
     "build:core": "webpack --config webpack/core.babel.js --color",
@@ -31,7 +31,7 @@
     "deps-check": "run-s deps-check:license deps-check:size",
     "deps-check:license": "license-checker --production --csv --out $npm_package_config_deps_check_dir/licenses.csv && license-checker --development --csv --out $npm_package_config_deps_check_dir/licenses-dev.csv",
     "deps-check:size": "webpack -p --config webpack/test_deps_size.babel.js --json | webpack-bundle-size-analyzer >| $npm_package_config_deps_check_dir/sizes.txt",
-    "dev": "webpack serve --config webpack/dev.babel.js",
+    "dev": "node api.js && webpack serve --config webpack/dev.babel.js",
     "hot-server": "webpack serve --host 0.0.0.0 --config webpack/dev.babel.js",
     "open-static": "open-cli 'http://localhost:3001'",
     "lint": "eslint --cache --ext '.js,.jsx' src test",
@@ -54,7 +54,7 @@
     "security-audit": "run-s -sc security-audit:all security-audit:prod",
     "security-audit:prod": "npm-audit-ci-wrapper -p -t low",
     "security-audit:all": "npm-audit-ci-wrapper -t moderate",
-    "start": "npm-run-all --parallel build:serve open-static",
+    "start": "node api.js && npm-run-all --parallel build:serve open-static",
     "watch": "webpack --config  webpack/core.babel.js --watch --progress"
   },
   "dependencies": {
